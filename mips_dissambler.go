@@ -43,7 +43,9 @@ const (
 	OFFSET_MASK      uint32 = 0x0000FFFF // >> 00
 )
 
-// FORMATS: http://en.wikibooks.org/wiki/MIPS_Assembly/Instruction_Formats#Opcodes
+// FORMATS:
+// http://en.wikibooks.org/wiki/MIPS_Assembly/Instruction_Formats#Opcodes
+// http://www.cs.umd.edu/class/sum2003/cmsc311/Notes/Mips/format.html
 
 // R-Format:
 // op rd, rs, rt
@@ -54,7 +56,7 @@ const (
 func main() {
 	fmt.Println("MIPS Disassembler \n")
 
-	showVerbose := false
+	showVerbose := true
 
 	for _, instruction := range instructions {
 
@@ -103,7 +105,7 @@ func Do_IFormat(instruction uint32, showVerbose bool) {
 	if showVerbose {
 		fmt.Println("---IFORMAT---")
 		fmt.Printf("Instruction : 0x%X \n", instruction)
-		fmt.Printf("Opcode      : %s \n", op)
+		fmt.Printf("Opcode      : [0x%X] %s \n", opcode, op)
 		fmt.Printf("RS_MASK          : 0x%X \n", rs)
 		fmt.Printf("RT_MASK          : 0x%X \n", rt)
 		fmt.Printf("Offset      : 0x%X \n", offset)
