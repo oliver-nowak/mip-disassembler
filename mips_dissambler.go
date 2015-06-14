@@ -119,6 +119,6 @@ func Do_IFormat(instruction int, showVerbose bool) {
 		fmt.Printf("%X     %3s  $%d,	%d($%d) \n", pc, op, rs, offset, rt)
 	} else {
 		offset_address := pc + 4 + int(decompressed_offset)
-		fmt.Printf("%X     %3s  $%d,	$%d,	address $%X \n", pc, op, rt, rs, offset_address)
+		fmt.Printf("%X     %3s  $%d,	$%d,	address %X \n", pc, op, rt, rs, offset_address)
 	}
 }
