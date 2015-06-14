@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	// "reflect"
 )
 
-var instructions = []uint32{
+var instructions = []int{
 	0x022DA822, // sub
 	0x8EF30018, // lw
 	0x12A70004, // beq
@@ -17,30 +18,30 @@ var instructions = []uint32{
 	0x158FFFF6,
 	0x8E59FFF0}
 
-var func_codes = map[uint32]string{
+var func_codes = map[int]string{
 	0x20: "add",
 	0x22: "sub",
 	0x24: "and",
 	0x25: "or",
 	0x2A: "slt"}
 
-var op_codes = map[uint32]string{
+var op_codes = map[int]string{
 	0x04: "beq",
 	0x05: "bne",
 	0x23: "lw",
 	0x2B: "sw"}
 
-var pc uint32 = 0x7A05C
+var pc int = 0x7A05C
 
 const (
-	INSTRUCTION_SIZE uint32 = 0x00000004 // in bytes
-	RFORMAT          uint32 = 0x0
-	OPCODE_MASK      uint32 = 0xFC000000 // >> 26
-	RS_MASK          uint32 = 0x03E00000 // >> 21
-	RT_MASK          uint32 = 0x001F0000 // >> 16
-	RD_MASK          uint32 = 0x0000F800 // >> 11
-	FUNC_MASK        uint32 = 0x0000003F // >> 00
-	OFFSET_MASK      uint32 = 0x0000FFFF // >> 00
+	INSTRUCTION_SIZE int = 0x00000004 // in bytes
+	RFORMAT          int = 0x0
+	OPCODE_MASK      int = 0xFC000000 // >> 26
+	RS_MASK          int = 0x03E00000 // >> 21
+	RT_MASK          int = 0x001F0000 // >> 16
+	RD_MASK          int = 0x0000F800 // >> 11
+	FUNC_MASK        int = 0x0000003F // >> 00
+	OFFSET_MASK      int = 0x0000FFFF // >> 00
 )
 
 // FORMATS:
@@ -56,7 +57,7 @@ const (
 func main() {
 	fmt.Println("MIPS Disassembler \n")
 
-	showVerbose := true
+	showVerbose := false
 
 	for _, instruction := range instructions {
 
@@ -72,7 +73,7 @@ func main() {
 	}
 }
 
-func Do_RFormat(instruction uint32, showVerbose bool) {
+func Do_RFormat(instruction int, showVerbose bool) {
 	opcode := (instruction & OPCODE_MASK) >> 26
 	rs := (instruction & RS_MASK) >> 21
 	rt := (instruction & RT_MASK) >> 16
@@ -91,15 +92,16 @@ func Do_RFormat(instruction uint32, showVerbose bool) {
 		fmt.Println("---END--")
 	}
 
-	fmt.Printf("%X     %s  $%d, $%d, $%d \n", pc, func_code, rd, rs, rt)
+	fmt.Printf("%X     %3s  $%d,	$%d,	$%d \n", pc, func_code, rd, rs, rt)
 }
 
-func Do_IFormat(instruction uint32, showVerbose bool) {
+func Do_IFormat(instruction int, showVerbose bool) {
 	opcode := (instruction & OPCODE_MASK) >> 26
 	op := op_codes[opcode]
 	rs := (instruction & RS_MASK) >> 21
 	rt := (instruction & RT_MASK) >> 16
-	offset := (instruction & OFFSET_MASK)
+	// cast to int16 in order to get correct signed number
+	offset := int16((instruction & OFFSET_MASK))
 	decompressed_offset := offset << 2
 
 	if showVerbose {
@@ -114,9 +116,9 @@ func Do_IFormat(instruction uint32, showVerbose bool) {
 	}
 
 	if op == "lw" || op == "sw" {
-		fmt.Printf("%X     %s  $%d, %d ($%d) \n", pc, op, rs, offset, rt)
+		fmt.Printf("%X     %3s  $%d,	%d($%d) \n", pc, op, rs, offset, rt)
 	} else {
-		offset_address := pc + 4 + decompressed_offset
-		fmt.Printf("%X     %s  $%d, $%d address $%X \n", pc, op, rt, rs, offset_address)
+		offset_address := pc + 4 + int(decompressed_offset)
+		fmt.Printf("%X     %3s  $%d,	$%d,	address $%X \n", pc, op, rt, rs, offset_address)
 	}
 }
