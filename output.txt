@@ -1,0 +1,15 @@
+ashpool::mips-disassembler$ go run mips_dissambler.go                                                                                                             (git)-[master]
+MIPS Disassembler
+
+7A060     sub  $21, $17,    $13
+7A064      lw  $23, 24($19)
+7A068     beq  $7,  $21,    address 7A07C
+7A06C     add  $19, $19,    $8
+7A070      sw  $12, 24($19)
+7A074     and  $15, $19,    $9
+7A078      sw  $12, -12($15)
+7A07C     add  $12, $12,    $12
+7A080      or  $21, $21,    $4
+7A084     bne  $15, $12,    address 7A060
+7A088      lw  $18, -16($25)
+ashpool::mips-disassembler$
