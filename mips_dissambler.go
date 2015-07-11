@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	// "reflect"
 )
 
 var instructions = []int{
@@ -116,7 +115,7 @@ func Do_IFormat(instruction int, showVerbose bool) {
 	}
 
 	if op == "lw" || op == "sw" {
-		fmt.Printf("%X     %3s  $%d,	%d($%d) \n", pc, op, rs, offset, rt)
+		fmt.Printf("%X     %3s  $%d,	%d($%d) \n", pc, op, rt, offset, rs)
 	} else {
 		offset_address := pc + 4 + int(decompressed_offset)
 		fmt.Printf("%X     %3s  $%d,	$%d,	address %X \n", pc, op, rt, rs, offset_address)
